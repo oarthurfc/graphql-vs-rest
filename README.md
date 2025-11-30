@@ -29,9 +29,11 @@ As variáveis dependentes são aquelas que serão medidas durante o experimento:
    - Medido em milissegundos
    - Precisão de até 2 casas decimais
 
-2. **Tamanho da Resposta (bytes):** Tamanho total do payload da resposta HTTP
+2. **Tamanho da Resposta (bytes):** Tamanho do corpo da resposta HTTP
    - Medido em bytes
-   - Inclui cabeçalhos HTTP e corpo da resposta
+   - Corresponde ao tamanho do payload JSON retornado (corpo da resposta)
+   - Para REST: tamanho do conteúdo JSON retornado
+   - Para GraphQL: tamanho do JSON serializado da resposta
 
 ---
 
@@ -183,12 +185,12 @@ Para garantir significância estatística e confiabilidade:
 ### A. Ambiente Experimental
 
 **Hardware:**
-- Processador: [Especificar]
-- Memória RAM: [Especificar]
-- Conexão: [Especificar tipo e velocidade]
+- Processador: Intel(R) Core(TM) i5-1035G1 CPU @ 1.00GHz
+- Memória RAM: 15 GB
+- Conexão: [Especificar tipo e velocidade - a ser preenchido durante execução]
 
 **Software:**
-- Sistema Operacional: macOS
+- Sistema Operacional: Linux (kernel 6.14.0-36-generic)
 - Linguagem: Python 3.9+
 - Bibliotecas principais:
   - `requests` - Requisições HTTP para REST
@@ -326,9 +328,14 @@ python-dotenv>=1.0.0
 #### config.py
 ```python
 # Configurações do Experimento
+import os
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente
+load_dotenv()
 
 # APIs
-GITHUB_TOKEN = "seu_token_aqui"  # Obter em https://github.com/settings/tokens
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "seu_token_aqui")  # Obter em https://github.com/settings/tokens
 GITHUB_REST_URL = "https://api.github.com"
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
 
@@ -356,6 +363,7 @@ HEADERS_REST = {
 
 HEADERS_GRAPHQL = {
     'Authorization': f'bearer {GITHUB_TOKEN}',
+    'Content-Type': 'application/json',
     'Cache-Control': 'no-cache'
 }
 ```
@@ -665,15 +673,51 @@ if __name__ == '__main__':
 - [ ] Criar conta no GitHub e gerar token de acesso pessoal
 - [ ] Criar estrutura de diretórios do projeto
 - [ ] Instalar Python 3.9+ e dependências (`pip install -r requirements.txt`)
-- [ ] Configurar token de API no arquivo `config.py`
+- [ ] Configurar token de API no arquivo `.env` (criar arquivo `.env` na raiz do projeto com `GITHUB_TOKEN=seu_token_aqui`)
 - [ ] Testar conectividade com APIs REST e GraphQL
 - [ ] Validar scripts individuais (`rest_client.py`, `graphql_client.py`)
-- [ ] Executar teste piloto com 5 repetições
+- [ ] Executar teste piloto com 5 repetições (modificar `REPETITIONS = 5` temporariamente em `config.py`)
 - [ ] Verificar formato e completude dos dados salvos
 - [ ] Documentar configuração do ambiente (hardware, software, rede)
 - [ ] Preparar ambiente estável para execução (fechar aplicações pesadas, conectar a rede estável)
 
-### F. Cronograma de Execução
+### F. Instruções de Uso
+
+#### 1. Configuração Inicial
+
+```bash
+# 1. Criar ambiente virtual (recomendado)
+python3 -m venv venv
+source venv/bin/activate  # No Linux/Mac
+# ou
+venv\Scripts\activate  # No Windows
+
+# 2. Instalar dependências
+pip install -r requirements.txt
+
+# 3. Configurar token do GitHub
+# Criar arquivo .env na raiz do projeto:
+echo "GITHUB_TOKEN=seu_token_github_aqui" > .env
+# Ou editar manualmente o arquivo .env
+```
+
+#### 2. Executar Experimento
+
+```bash
+# Executar o experimento completo
+cd scripts
+python experiment.py
+
+# Os resultados serão salvos em results/measurements.csv
+```
+
+#### 3. Estrutura de Arquivos Criados
+
+Após a execução, você terá:
+- `results/measurements.csv`: Dados brutos de todas as medições
+- Estrutura de diretórios conforme planejado
+
+### G. Cronograma de Execução
 
 **Fase 1 - Preparação (1-2 dias):**
 - Configuração do ambiente
@@ -721,16 +765,136 @@ Para cada tratamento, calcular:
 
 ---
 
-## 4. PRÓXIMOS PASSOS (Sprint 2)
+## 4. EXECUÇÃO DO EXPERIMENTO (Passo 3 - Lab05S02)
 
-1. Executar o experimento conforme planejado
-2. Coletar e validar dados
-3. Realizar análise estatística
-4. Interpretar resultados
-5. Elaborar relatório final
+**Status:** ✅ **CONCLUÍDO**
+
+O Passo 3 (Execução do Experimento) foi realizado com sucesso. Os dados foram coletados e estão disponíveis em `results/measurements.csv`.
+
+### Resultados da Execução:
+
+- **Total de medições:** 180 (6 tratamentos × 30 repetições)
+- **Taxa de sucesso:** 100% (180/180 medições bem-sucedidas)
+- **Distribuição:**
+  - REST: 90 medições
+  - GraphQL: 90 medições
+  - Cada tratamento: 30 medições
+- **Arquivo gerado:** `results/measurements.csv`
+
+### Validação dos Dados:
+
+- ✅ Todas as medições foram bem-sucedidas
+- ✅ Dados completos (sem valores faltantes)
+- ✅ Distribuição equilibrada entre tratamentos
+- ⚠️ 2 outliers detectados em GraphQL (análise necessária)
+
+**Próximo passo:** Elaborar relatório final (Passo 5)
+
+---
+
+## 5. ANÁLISE DE RESULTADOS (Passo 4 - Lab05S02)
+
+**Status:** ✅ **CONCLUÍDO**
+
+### Análise Realizada:
+
+1. **Revisão dos valores obtidos:**
+   - ✅ Validação básica: 180 medições, todas bem-sucedidas
+   - ✅ Identificação de outliers: 2 outliers detectados em GraphQL
+   - ✅ Verificação de valores: Análise completa realizada
+
+2. **Análise estatística formal:**
+   - ✅ Estatísticas descritivas (média, mediana, desvio padrão, quartis)
+   - ✅ Teste de normalidade (Shapiro-Wilk)
+   - ✅ Teste de homogeneidade de variâncias (Levene)
+   - ✅ Teste de hipótese (Mann-Whitney U - não-paramétrico)
+   - ✅ Tamanho de efeito (Cohen's d)
+   - ✅ Análise por complexidade (simples, média, complexa)
+
+**Script de análise:** `scripts/analysis.py`  
+**Resultados salvos em:**
+- `results/statistics.json` - Resultados completos
+- `results/statistics_summary.csv` - Resumo estatístico
+- `docs/ANALISE_RESULTADOS.md` - Relatório completo
+
+### Resultados da Análise Estatística:
+
+**RQ1 - Tempo de Resposta:**
+- REST: Média = 798.30 ms, Mediana = 509.61 ms
+- GraphQL: Média = 597.15 ms, Mediana = 545.65 ms
+- **Teste:** Mann-Whitney U (p = 0.4596)
+- **Conclusão:** Não há diferença estatisticamente significativa (não rejeitamos H₀)
+- **Observação:** GraphQL é ~25% mais rápido em média, mas a diferença não é significativa. Para consultas complexas, GraphQL é significativamente mais rápido (p < 0.0001).
+
+**RQ2 - Tamanho da Resposta:**
+- REST: Média = 31,953 bytes (31.20 KB), Mediana = 46,555 bytes
+- GraphQL: Média = 4,467 bytes (4.36 KB), Mediana = 3,203 bytes
+- **Teste:** Mann-Whitney U (p < 0.0001)
+- **Conclusão:** GraphQL tem tamanho estatisticamente menor (rejeitamos H₀)
+- **Tamanho de efeito:** Grande (Cohen's d = -1.75)
+
+---
+
+## 6. PRÓXIMOS PASSOS (Sprint 2 - Lab05S02)
+
+1. ✅ Executar o experimento conforme planejado (Passo 3) - **CONCLUÍDO**
+2. ✅ Coletar e validar dados - **CONCLUÍDO**
+3. ✅ Realizar análise estatística (Passo 4) - **CONCLUÍDO**
+4. ✅ Interpretar resultados - **CONCLUÍDO** (ver `docs/ANALISE_RESULTADOS.md`)
+5. ⚠️ Elaborar relatório final (Passo 5) - **PENDENTE**
+
+### Resumo das Respostas às Perguntas de Pesquisa:
+
+**RQ1:** Não há evidência estatística de que GraphQL seja mais rápido que REST quando consideramos todas as consultas juntas. No entanto, para consultas complexas, GraphQL é significativamente mais rápido.
+
+**RQ2:** GraphQL tem tamanho estatisticamente menor que REST, com diferença de 86% em média e efeito grande e significativo (p < 0.0001, Cohen's d = -1.75).
+
+---
+
+## 6. ARQUIVOS CRIADOS
+
+### Estrutura Completa do Projeto
+
+```
+graphql-vs-rest/
+├── data/
+│   ├── raw/                 # Dados brutos das medições
+│   ├── processed/           # Dados processados
+│   └── queries/             # Consultas REST e GraphQL
+├── scripts/
+│   ├── config.py            # Configurações do experimento
+│   ├── rest_client.py       # Cliente para APIs REST
+│   ├── graphql_client.py    # Cliente para APIs GraphQL
+│   └── experiment.py       # Script principal do experimento
+├── results/
+│   └── measurements.csv     # Resultados das medições (gerado após execução)
+├── docs/                    # Documentação adicional
+├── .gitignore              # Arquivos a ignorar no Git
+├── requirements.txt         # Dependências Python
+├── README.md               # Este documento
+└── INSTALL.md              # Instruções detalhadas de instalação
+```
+
+### Arquivos de Configuração
+
+- **`.env`**: Arquivo de configuração com o token do GitHub (criar manualmente)
+- **`config.py`**: Configurações do experimento (repetições, intervalos, tratamentos)
+- **`requirements.txt`**: Lista de dependências Python
+
+### Scripts Principais
+
+- **`experiment.py`**: Script principal que executa todo o experimento
+- **`rest_client.py`**: Cliente para fazer requisições REST
+- **`graphql_client.py`**: Cliente para fazer requisições GraphQL
 
 ---
 
 **Documento elaborado para Lab05S01**  
 **Data:** Novembro 2025  
 **Status:** Preparação Concluída ✓
+
+**Próximos Passos:**
+1. Configurar token do GitHub (ver `INSTALL.md`)
+2. Executar teste piloto com 5 repetições
+3. Executar experimento completo com 30 repetições
+4. Analisar resultados (Sprint 2)

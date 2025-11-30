@@ -1,0 +1,142 @@
+{
+  "timestamp": "2025-11-30T14:59:55.023974",
+  "rq1": {
+    "descriptive": {
+      "GraphQL": {
+        "n": 90,
+        "mean": 597.1505555555555,
+        "median": 545.655,
+        "std": 245.12213513093545,
+        "min": 361.14,
+        "max": 2233.58,
+        "q1": 448.4725,
+        "q3": 690.43,
+        "iqr": 241.95749999999992
+      },
+      "REST": {
+        "n": 90,
+        "mean": 798.2969999999999,
+        "median": 509.605,
+        "std": 483.0582229579613,
+        "min": 346.36,
+        "max": 1982.1,
+        "q1": 435.925,
+        "q3": 1331.1,
+        "iqr": 895.175
+      }
+    },
+    "normality": {
+      "REST": {
+        "statistic": 0.7661345378197235,
+        "pvalue": 1.175749832918631e-10,
+        "normal": "False",
+        "alpha": 0.05
+      },
+      "GraphQL": {
+        "statistic": 0.6458776740806915,
+        "pvalue": 2.0609304292699593e-13,
+        "normal": "False",
+        "alpha": 0.05
+      }
+    },
+    "homogeneity": {
+      "statistic": 21.576924620643144,
+      "pvalue": 6.587266154309132e-06,
+      "homogeneous": "False",
+      "alpha": 0.05
+    },
+    "test": {
+      "name": "Mann-Whitney U (unilateral)",
+      "statistic": 4014.0,
+      "pvalue": 0.459551579222624,
+      "significant": "False"
+    },
+    "effect_size": {
+      "d": -0.5251399051172606,
+      "interpretation": "m\u00e9dio",
+      "magnitude": 0.5251399051172606
+    },
+    "conclusion": "Sem diferen\u00e7a significativa"
+  },
+  "rq2": {
+    "descriptive": {
+      "GraphQL": {
+        "n": 90,
+        "mean": 4467.0,
+        "median": 3203.0,
+        "std": 4178.5303582786355,
+        "min": "129",
+        "max": "10069",
+        "q1": 129.0,
+        "q3": 10069.0,
+        "iqr": 9940.0
+      },
+      "REST": {
+        "n": 90,
+        "mean": 31952.666666666668,
+        "median": 46555.0,
+        "std": 21859.85571567462,
+        "min": "1223",
+        "max": "48080",
+        "q1": 1223.0,
+        "q3": 48080.0,
+        "iqr": 46857.0
+      }
+    },
+    "normality": {
+      "REST": {
+        "statistic": 0.6140348105729299,
+        "pvalue": 4.980985731956994e-14,
+        "normal": "False",
+        "alpha": 0.05
+      },
+      "GraphQL": {
+        "statistic": 0.756248037766588,
+        "pvalue": 6.475304037991295e-11,
+        "normal": "False",
+        "alpha": 0.05
+      }
+    },
+    "homogeneity": {
+      "statistic": 29.969061481028685,
+      "pvalue": 1.4755699880453007e-07,
+      "homogeneous": "False",
+      "alpha": 0.05
+    },
+    "test": {
+      "name": "Mann-Whitney U (unilateral)",
+      "statistic": 1800.0,
+      "pvalue": 3.3577839927586246e-11,
+      "significant": "True"
+    },
+    "effect_size": {
+      "d": -1.746550836079221,
+      "interpretation": "grande",
+      "magnitude": 1.746550836079221
+    },
+    "conclusion": "GraphQL \u00e9 menor"
+  },
+  "complexity": {
+    "simple": {
+      "rest_mean": 464.66066666666666,
+      "graphql_mean": 440.691,
+      "pvalue": 0.9313385825765035,
+      "effect_size": -0.17048943414426443,
+      "significant": "False"
+    },
+    "medium": {
+      "rest_mean": 485.7243333333332,
+      "graphql_mean": 805.9436666666667,
+      "pvalue": 0.9999999999863444,
+      "effect_size": 1.4327712082159338,
+      "significant": "False"
+    },
+    "complex": {
+      "rest_mean": 1444.5059999999999,
+      "graphql_mean": 544.8169999999999,
+      "pvalue": 1.5099296795810785e-11,
+      "effect_size": -6.391396438395956,
+      "significant": "True"
+    }
+  }
+}
